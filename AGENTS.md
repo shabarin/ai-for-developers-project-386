@@ -29,6 +29,16 @@ When making API changes:
 | `npm run compile` | Compile TypeSpec → OpenAPI (`tsp-output/schema/openapi.yaml`) |
 | `npm run mock` | Start Prism mock server on `http://localhost:4010` |
 
+#### Frontend Commands
+
+Run from `frontend/` directory:
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Vite dev server on `http://localhost:3000` |
+| `npm run build` | Build frontend for production (output: `frontend/dist/`) |
+| `npm run preview` | Preview production build locally |
+
 ## Prism Mock Server
 
 - Runs on port **4010**
@@ -41,6 +51,15 @@ When making API changes:
 - **TypeSpec** v1.11 — API specification language (Microsoft)
 - **Prism** v5.15 — mock server from OpenAPI spec (Stoplight)
 - **OpenAPI 3.1** — generated output format
+
+### Frontend
+
+- **Vite** v6 — fast dev server and build tool
+- **React** v19 — UI library
+- **TypeScript** v6 — type system
+- **Mantine** v7 — UI component library
+- **React Router** v7 — client-side routing
+- **dayjs** — date manipulation library
 
 ## Key Conventions
 
@@ -57,4 +76,60 @@ tspconfig.yaml                    # TypeSpec compiler configuration
 tsp-output/schema/openapi.yaml    # Generated OpenAPI spec (DO NOT EDIT)
 package.json                      # Scripts and dependencies
 DEVELOPMENT.md                    # Human-readable development guide
+
+frontend/                         # Frontend application
+├── index.html                    # Entry HTML
+├── package.json                  # Frontend dependencies
+├── vite.config.ts                # Vite configuration
+├── src/
+│   ├── main.tsx                  # React entry point
+│   ├── App.tsx                   # Main app with routing
+│   ├── theme.ts                  # Mantine theme config
+│   ├── types/                    # TypeScript types (from API)
+│   ├── api/                      # API client and endpoints
+│   ├── components/               # Reusable UI components
+│   └── pages/                   # Page components (public + admin)
+└── dist/                         # Production build output
 ```
+
+## Frontend Development
+
+### Prerequisites
+
+- Node.js >= 22.12 (for Vite 6)
+- Mock server running: `npm run mock` (from project root)
+
+### Quick Start
+
+1. **Start mock server** (terminal 1):
+   ```bash
+   cd /Users/ivan/edu/ai-for-developers/hands-on/ai-for-developers-project-386
+   nvm use 24  # Node.js >= 24.14 required for Prism
+   npm run mock
+   ```
+   Mock server runs on `http://localhost:4010`
+
+2. **Start frontend** (terminal 2):
+   ```bash
+   cd /Users/ivan/edu/ai-for-developers/hands-on/ai-for-developers-project-386/frontend
+   npm run dev
+   ```
+   Frontend dev server runs on `http://localhost:3000`
+
+### Frontend Architecture
+
+- **Public routes** (guest-facing):
+  - `/` — Home page with available event types
+  - `/book/:eventTypeId` — Booking page with calendar and form
+  - `/booking/:id` — Booking confirmation
+
+- **Admin routes** (owner-facing):
+  - `/admin` — Event types list (CRUD)
+  - `/admin/event-types/new` — Create event type
+  - `/admin/event-types/:id/edit` — Edit event type
+  - `/admin/bookings` — Upcoming bookings list
+
+### API Connection
+
+Frontend connects to mock server at `http://localhost:4010`.
+Update `frontend/src/api/client.ts` to change the API base URL.
