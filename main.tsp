@@ -1,3 +1,116 @@
 import "@typespec/http";
+import "@typespec/rest";
+import "@typespec/openapi3";
 
 using Http;
+using Rest;
+
+@service
+namespace Kalenda;
+
+// ============================================
+// Models
+// ============================================
+
+model EventType {
+  id: string;
+  title: string;
+  description: string;
+  duration: int32;
+}
+
+model CreateEventType {
+  id: string;
+  title: string;
+  description: string;
+  duration: int32;
+}
+
+model UpdateEventType {
+  title?: string;
+  description?: string;
+  duration?: int32;
+}
+
+model Booking {
+  id: string;
+  eventTypeId: string;
+  guestName: string;
+  guestEmail: string;
+  startAt: utcDateTime;
+  endAt: utcDateTime;
+  createdAt: utcDateTime;
+}
+
+model CreateBooking {
+  eventTypeId: string;
+  startAt: utcDateTime;
+  guestName: string;
+  guestEmail: string;
+}
+
+model Slot {
+  startAt: utcDateTime;
+  endAt: utcDateTime;
+  isAvailable: boolean;
+}
+
+// ============================================
+// Admin Operations
+// ============================================
+
+@route("/admin")
+namespace Admin {
+
+  @route("/event-types")
+  namespace EventTypes {
+
+    @get op list(): EventType[];
+
+    @post op create(@body body: CreateEventType): EventType;
+
+    @route("/{id}")
+    @put op update(@path id: string, @body body: UpdateEventType): EventType;
+
+    @route("/{id}")
+    @delete op delete(@path id: string): void;
+  }
+
+  @route("/bookings")
+  namespace Bookings {
+
+    @get op list(): Booking[];
+
+    @route("/{id}")
+    @get op get(@path id: string): Booking;
+  }
+}
+
+// ============================================
+// Public Operations
+// ============================================
+
+@route("/public")
+namespace Public {
+
+  @route("/event-types")
+  namespace EventTypes {
+
+    @get op list(): EventType[];
+  }
+
+  @route("/event-types/{id}/slots")
+  namespace Slots {
+
+    @get op list(@path id: string): Slot[];
+  }
+
+  @route("/bookings")
+  namespace Bookings {
+
+    @post op create(@body body: CreateBooking): Booking;
+
+    @route("/{id}")
+    @get op get(@path id: string): Booking;
+  }
+}
