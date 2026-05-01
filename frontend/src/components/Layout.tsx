@@ -14,7 +14,9 @@ export function Layout() {
         <Group h="100%" px="md" justify="space-between">
           <Group>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Title order={3}>Kalenda</Title>
+            <Anchor component={Link} to="/" underline="never" c="inherit">
+              <Title order={3}>Kalenda</Title>
+            </Anchor>
           </Group>
           <Anchor component={Link} to="/admin" size="sm">
             Admin
