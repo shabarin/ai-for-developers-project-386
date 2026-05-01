@@ -57,7 +57,7 @@ Run from `frontend/` directory:
 - **Vite** v6 — fast dev server and build tool
 - **React** v19 — UI library
 - **TypeScript** v6 — type system
-- **Mantine** v7 — UI component library
+- **Mantine** v9 — UI component library
 - **React Router** v7 — client-side routing
 - **dayjs** — date manipulation library
 
