@@ -1,9 +1,11 @@
 import "@typespec/http";
 import "@typespec/rest";
+import "@typespec/openapi";
 import "@typespec/openapi3";
 
 using Http;
 using Rest;
+using OpenAPI;
 
 @service
 namespace Kalenda;
@@ -12,6 +14,12 @@ namespace Kalenda;
 // Models
 // ============================================
 
+@example(#{
+  id: "evt-consultation",
+  title: "Consultation",
+  description: "30-minute consultation call",
+  duration: 30
+})
 model EventType {
   id: string;
   title: string;
@@ -19,6 +27,12 @@ model EventType {
   duration: int32;
 }
 
+@example(#{
+  id: "evt-workshop",
+  title: "Workshop",
+  description: "2-hour hands-on workshop",
+  duration: 15
+})
 model CreateEventType {
   id: string;
   title: string;
@@ -26,6 +40,11 @@ model CreateEventType {
   duration: int32;
 }
 
+@example(#{
+  title: "Extended Consultation",
+  description: "60-minute extended consultation",
+  duration: 30
+})
 model UpdateEventType {
   title?: string;
   description?: string;
