@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar } from '@mantine/dates';
 import { Text, Loader, Alert, Group, Button } from '@mantine/core';
 import { listSlots } from '../api/slots';
@@ -17,13 +17,16 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [availableSlots, setAvailableSlots] = useState<Slot[]>([]);
 
-  const loadSlots = async (date: Date) => {
+  const loadSlots = async () => {
     setLoading(true);
     setError(null);
     try {
       const data = await listSlots(eventTypeId);
+      console.log('Loaded slots:', data);
       setSlots(data);
-      filterSlotsByDate(data, date);
+      if (selectedDate) {
+        filterSlotsByDate(data, selectedDate);
+      }
     } catch {
       setError('Failed to load slots');
     } finally {
@@ -31,53 +34,76 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
     }
   };
 
-  const filterSlotsByDate = (allSlots: Slot[], date: Date) => {
-    const dateStr = dayjs(date).format('YYYY-MM-DD');
+  useEffect(() => {
+    loadSlots();
+  }, [eventTypeId]);
+
+  const filterSlotsByDate = (allSlots: Slot[], dateStr: string) => {
+    const dateNormalized = dayjs(dateStr).format('YYYY-MM-DD');
     const filtered = allSlots.filter(
       (slot) =>
-        dayjs(slot.startAt).format('YYYY-MM-DD') === dateStr && slot.isAvailable
+        dayjs(slot.startAt).format('YYYY-MM-DD') === dateNormalized && slot.isAvailable
     );
+    console.log('Filtered slots for', dateNormalized, ':', filtered);
     setAvailableSlots(filtered);
   };
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);
-    const dateObj = new Date(date);
-    if (slots.length === 0) {
-      loadSlots(dateObj);
-    } else {
-      filterSlotsByDate(slots, dateObj);
+    if (slots.length > 0) {
+      filterSlotsByDate(slots, date);
     }
+  };
+
+  const handleSlotClick = (slot: Slot) => {
+    console.log('Selected slot:', slot);
+    onSelectSlot(slot);
   };
 
   return (
     <>
       <Calendar
-        date={selectedDate || new Date()}
+        date={selectedDate || dayjs().format('YYYY-MM-DD')}
         onDateChange={handleDateChange}
         minDate={new Date()}
         maxDate={dayjs().add(14, 'day').toDate()}
       />
+
       {loading && <Loader />}
       {error && <Alert color="red">{error}</Alert>}
+
+      {!loading && slots.length === 0 && (
+        <Text c="dimmed" mt="md">No slots available for this event type.</Text>
+      )}
+
       {selectedDate && !loading && (
         <>
           <Text mt="md" fw={500}>
-            Available slots for {selectedDate}:
+            Available slots for {dayjs(selectedDate).format('YYYY-MM-DD')}:
           </Text>
           <Group mt="sm">
-            {availableSlots.length === 0 && <Text c="dimmed">No available slots</Text>}
+            {availableSlots.length === 0 && slots.length > 0 && (
+              <Text c="dimmed">
+                No available slots for this date. Try another date.
+              </Text>
+            )}
             {availableSlots.map((slot) => (
               <Button
                 key={slot.startAt}
                 variant="outline"
-                onClick={() => onSelectSlot(slot)}
+                onClick={() => handleSlotClick(slot)}
               >
                 {dayjs(slot.startAt).format('HH:mm')}
               </Button>
             ))}
           </Group>
         </>
+      )}
+
+      {slots.length > 0 && (
+        <Text mt="md" size="sm" c="dimmed">
+          Total slots: {slots.length}, Available: {slots.filter(s => s.isAvailable).length}
+        </Text>
       )}
     </>
   );

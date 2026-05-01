@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SimpleGrid } from '@mantine/core';
+import { SimpleGrid, Title } from '@mantine/core';
 import { listPublicEventTypes } from '../../api/eventTypes';
 import { EventTypeCard } from '../../components/EventTypeCard';
 import type { EventType } from '../../types';
@@ -19,13 +19,12 @@ export function HomePage() {
 
   return (
     <div>
-      <h1>Available Event Types</h1>
+      <Title order={1} mb="md">Available Event Types</Title>
       <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
         {eventTypes.map((et) => (
           <EventTypeCard
             key={et.id}
             eventType={et}
-            onSelect={(id) => (window.location.href = `/book/${id}`)}
           />
         ))}
       </SimpleGrid>
