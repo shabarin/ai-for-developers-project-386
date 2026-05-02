@@ -75,10 +75,19 @@ func (s *Store) ListEventTypes() []models.EventType {
 }
 
 // Booking operations
-func (s *Store) CreateBooking(b models.Booking) {
+func (s *Store) CreateBooking(b models.Booking) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
+	// Check if slot is still available (atomically)
+	for _, existing := range s.bookings {
+		if b.StartAt.Before(existing.EndAt) && b.EndAt.After(existing.StartAt) {
+			return false // slot conflict
+		}
+	}
+
 	s.bookings[b.ID] = b
+	return true
 }
 
 func (s *Store) GetBooking(id string) (models.Booking, bool) {

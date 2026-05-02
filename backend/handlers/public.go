@@ -65,13 +65,7 @@ func (h *PublicHandler) CreateBooking(w http.ResponseWriter, r *http.Request) {
 	startAt := create.StartAt
 	endAt := startAt.Add(time.Duration(eventType.Duration) * time.Minute)
 
-	// Check if slot is available
-	if !h.store.IsSlotAvailable(startAt, endAt) {
-		RespondError(w, http.StatusConflict, "Slot is not available")
-		return
-	}
-
-	// Create booking
+	// Create booking (atomically checks slot availability)
 	booking := models.Booking{
 		ID:          utils.GenerateBookingID(),
 		EventTypeId: create.EventTypeId,
@@ -82,7 +76,10 @@ func (h *PublicHandler) CreateBooking(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:   time.Now().UTC(),
 	}
 
-	h.store.CreateBooking(booking)
+	if !h.store.CreateBooking(booking) {
+		RespondError(w, http.StatusConflict, "Slot is not available")
+		return
+	}
 
 	RespondJSON(w, http.StatusOK, booking)
 }
