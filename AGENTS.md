@@ -52,6 +52,14 @@ Run from `frontend/` directory:
 - **Prism** v5.15 — mock server from OpenAPI spec (Stoplight)
 - **OpenAPI 3.1** — generated output format
 
+### Backend
+
+- **PHP** 8.4 — programming language
+- **Symfony** v7.2 — web framework
+- **API Platform** v4.1 — API framework for Symfony
+- **SQLite** — database
+- **Doctrine ORM** — database abstraction layer
+
 ### Frontend
 
 - **Vite** v6 — fast dev server and build tool
