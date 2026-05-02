@@ -51,6 +51,15 @@ Run from `frontend/` directory:
 - **TypeSpec** v1.11 — API specification language (Microsoft)
 - **Prism** v5.15 — mock server from OpenAPI spec (Stoplight)
 - **OpenAPI 3.1** — generated output format
+- **Go** v1.21+ — backend language (gorilla/mux router)
+
+### Backend (Go)
+
+- **gorilla/mux** v1.8.1 — HTTP router and URL matcher
+- **In-memory storage** — thread-safe store with `sync.RWMutex`
+- **No database** — state stored in memory (resets on restart)
+- **Port**: 8080 (configurable via `PORT` env)
+- **CORS**: configured for `http://localhost:3000`
 
 ### Frontend
 
@@ -77,10 +86,24 @@ tsp-output/schema/openapi.yaml    # Generated OpenAPI spec (DO NOT EDIT)
 package.json                      # Scripts and dependencies
 DEVELOPMENT.md                    # Human-readable development guide
 
+backend/                          # Go backend application
+├── main.go                       # Entry point, router setup
+├── go.mod                        # Go module definition
+├── models/
+│   └── models.go                 # Data models (EventType, Booking, Slot)
+├── store/
+│   └── store.go                  # In-memory storage (thread-safe)
+├── handlers/
+│   ├── admin.go                  # Admin API handlers
+│   ├── public.go                 # Public API handlers
+│   └── common.go                 # JSON responses, error helpers
+└── utils/
+    └── utils.go                  # ID generation, slot generation
+
 frontend/                         # Frontend application
 ├── index.html                    # Entry HTML
 ├── package.json                  # Frontend dependencies
-├── vite.config.ts                # Vite configuration
+├── vite.config.ts                # Vite configuration (proxies to :8080)
 ├── src/
 │   ├── main.tsx                  # React entry point
 │   ├── App.tsx                   # Main app with routing
@@ -97,17 +120,17 @@ frontend/                         # Frontend application
 ### Prerequisites
 
 - Node.js >= 22.12 (for Vite 6)
-- Mock server running: `npm run mock` (from project root)
+- Go >= 1.21 (for backend)
+- Backend running: `cd backend && go run main.go`
 
 ### Quick Start
 
-1. **Start mock server** (terminal 1):
+1. **Start Go backend** (terminal 1):
    ```bash
-   cd /Users/ivan/edu/ai-for-developers/hands-on/ai-for-developers-project-386
-   nvm use 24  # Node.js >= 24.14 required for Prism
-   npm run mock
+   cd /Users/ivan/edu/ai-for-developers/hands-on/ai-for-developers-project-386/backend
+   go run main.go
    ```
-   Mock server runs on `http://localhost:4010`
+   Backend runs on `http://localhost:8080`
 
 2. **Start frontend** (terminal 2):
    ```bash
@@ -131,5 +154,6 @@ frontend/                         # Frontend application
 
 ### API Connection
 
-Frontend connects to mock server at `http://localhost:4010`.
-Update `frontend/src/api/client.ts` to change the API base URL.
+Frontend connects to Go backend at `http://localhost:8080` via Vite proxy.
+Vite proxies `/api` requests to backend (configured in `frontend/vite.config.ts`).
+Frontend API base URL is `/api` (see `frontend/src/api/client.ts`).
