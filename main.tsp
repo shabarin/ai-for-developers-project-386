@@ -89,10 +89,10 @@ namespace Admin {
     @post op create(@body body: CreateEventType): EventType;
 
     @route("/{id}")
-    @put op update(@path id: string, @body body: UpdateEventType): EventType;
+    @put op update(@path id: string, @body body: UpdateEventType): EventType | NotFoundResponse;
 
     @route("/{id}")
-    @delete op delete(@path id: string): void;
+    @delete op delete(@path id: string): NoContentResponse | NotFoundResponse;
   }
 
   @route("/bookings")
@@ -101,7 +101,7 @@ namespace Admin {
     @get op list(): Booking[];
 
     @route("/{id}")
-    @get op get(@path id: string): Booking;
+    @get op get(@path id: string): Booking | NotFoundResponse;
   }
 }
 
@@ -127,9 +127,9 @@ namespace Public {
   @route("/bookings")
   namespace Bookings {
 
-    @post op create(@body body: CreateBooking): Booking;
+    @post op create(@body body: CreateBooking): Booking | ConflictResponse;
 
     @route("/{id}")
-    @get op get(@path id: string): Booking;
+    @get op get(@path id: string): Booking | NotFoundResponse;
   }
 }
