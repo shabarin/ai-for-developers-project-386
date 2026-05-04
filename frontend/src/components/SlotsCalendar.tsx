@@ -76,7 +76,7 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
           <Text mt="md" fw={500}>
             Available slots for {dayjs(selectedDate).format('YYYY-MM-DD')}:
           </Text>
-          <Group mt="sm">
+            <Group mt="sm" data-testid="available-slots">
             {availableSlots.length === 0 && slots.length > 0 && (
               <Text c="dimmed">
                 No available slots for this date. Try another date.
