@@ -12,10 +12,10 @@ interface EventTypeCardProps {
 
 export function EventTypeCard({ eventType, onSelect, onEdit, onDelete, isAdmin = false }: EventTypeCardProps) {
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder style={{ cursor: 'pointer' }}>
+    <Card shadow="sm" padding="lg" radius="md" withBorder style={{ cursor: 'pointer' }} data-testid="event-type-card">
       <Group justify="space-between" mb="xs">
         {isAdmin ? (
-          <Text fw={500}>{eventType.title}</Text>
+          <Text fw={500} data-testid="event-type-title">{eventType.title}</Text>
         ) : (
           <Text
             fw={500}
@@ -25,13 +25,14 @@ export function EventTypeCard({ eventType, onSelect, onEdit, onDelete, isAdmin =
             style={{ textDecoration: 'none' }}
             onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
             onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+            data-testid="event-type-link"
           >
             {eventType.title}
           </Text>
         )}
-        <Badge>{eventType.duration} min</Badge>
+        <Badge data-testid="event-type-duration">{eventType.duration} min</Badge>
       </Group>
-      <Text size="sm" c="dimmed" mb="md">
+      <Text size="sm" c="dimmed" mb="md" data-testid="event-type-description">
         {eventType.description}
       </Text>
       <Group>
@@ -42,6 +43,7 @@ export function EventTypeCard({ eventType, onSelect, onEdit, onDelete, isAdmin =
             component={Link}
             to={`/book/${eventType.id}`}
             style={{ textDecoration: 'none' }}
+            data-testid="book-link"
           >
             Book
           </Text>
@@ -52,6 +54,7 @@ export function EventTypeCard({ eventType, onSelect, onEdit, onDelete, isAdmin =
             c="blue"
             style={{ cursor: 'pointer' }}
             onClick={() => onEdit(eventType.id)}
+            data-testid="edit-link"
           >
             Edit
           </Text>
@@ -62,6 +65,7 @@ export function EventTypeCard({ eventType, onSelect, onEdit, onDelete, isAdmin =
             c="red"
             style={{ cursor: 'pointer' }}
             onClick={() => onDelete(eventType.id)}
+            data-testid="delete-link"
           >
             Delete
           </Text>

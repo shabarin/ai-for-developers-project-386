@@ -31,7 +31,7 @@ export function BookPage() {
   if (!eventTypeId) return <Text>Invalid event type</Text>;
 
   return (
-    <Stack>
+    <Stack data-testid="book-page">
       <h1>Book Event</h1>
       {!selectedSlot ? (
         <SlotsCalendar eventTypeId={eventTypeId} onSelectSlot={handleSelectSlot} />

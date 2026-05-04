@@ -63,7 +63,7 @@ export function EventTypeFormPage() {
   };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form onSubmit={form.onSubmit(handleSubmit)} data-testid="event-type-form">
       <Stack>
         <h1>{isEdit ? 'Edit Event Type' : 'Create Event Type'}</h1>
         {!isEdit && (
@@ -91,7 +91,7 @@ export function EventTypeFormPage() {
           required
           {...form.getInputProps('duration')}
         />
-        <Button type="submit" loading={loading}>
+        <Button type="submit" loading={loading} data-testid="save-button">
           Save
         </Button>
       </Stack>

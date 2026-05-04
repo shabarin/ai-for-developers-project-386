@@ -61,7 +61,7 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
   };
 
   return (
-    <>
+    <div data-testid="slots-calendar">
       <Calendar
         date={selectedDate || dayjs().format('YYYY-MM-DD')}
         onDateChange={handleDateChange}
@@ -92,6 +92,7 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
                 key={slot.startAt}
                 variant="outline"
                 onClick={() => handleSlotClick(slot)}
+                data-testid="slot-button"
               >
                 {dayjs(slot.startAt).format('HH:mm')}
               </Button>
@@ -105,6 +106,6 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
           Total slots: {slots.length}, Available: {slots.filter(s => s.isAvailable).length}
         </Text>
       )}
-    </>
+    </div>
   );
 }

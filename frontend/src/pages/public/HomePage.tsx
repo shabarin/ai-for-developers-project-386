@@ -18,8 +18,8 @@ export function HomePage() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div>
-      <Title order={1} mb="md">Available Event Types</Title>
+    <div data-testid="home-page">
+      <Title order={1} mb="md" data-testid="page-title">Available Event Types</Title>
       <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
         {eventTypes.map((et) => (
           <EventTypeCard

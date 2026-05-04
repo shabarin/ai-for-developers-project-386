@@ -33,10 +33,10 @@ export function AdminEventTypesPage() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div data-testid="admin-page">
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
         <h1>Event Types</h1>
-        <Button component={Link} to="/admin/event-types/new">
+        <Button component={Link} to="/admin/event-types/new" data-testid="create-button">
           Create New
         </Button>
       </div>
