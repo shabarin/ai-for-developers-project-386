@@ -22,11 +22,7 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
     setError(null);
     try {
       const data = await listSlots(eventTypeId);
-      console.log('Loaded slots:', data);
       setSlots(data);
-      if (selectedDate) {
-        filterSlotsByDate(data, selectedDate);
-      }
     } catch {
       setError('Failed to load slots');
     } finally {
@@ -38,33 +34,32 @@ export function SlotsCalendar({ eventTypeId, onSelectSlot }: SlotsCalendarProps)
     loadSlots();
   }, [eventTypeId]);
 
-  const filterSlotsByDate = (allSlots: Slot[], dateStr: string) => {
-    const dateNormalized = dayjs(dateStr).format('YYYY-MM-DD');
-    const filtered = allSlots.filter(
+  useEffect(() => {
+    if (!selectedDate || slots.length === 0) {
+      setAvailableSlots([]);
+      return;
+    }
+    const dateNormalized = dayjs(selectedDate).format('YYYY-MM-DD');
+    const filtered = slots.filter(
       (slot) =>
         dayjs(slot.startAt).format('YYYY-MM-DD') === dateNormalized && slot.isAvailable
     );
-    console.log('Filtered slots for', dateNormalized, ':', filtered);
     setAvailableSlots(filtered);
-  };
-
-  const handleDateChange = (date: string) => {
-    setSelectedDate(date);
-    if (slots.length > 0) {
-      filterSlotsByDate(slots, date);
-    }
-  };
+  }, [selectedDate, slots]);
 
   const handleSlotClick = (slot: Slot) => {
-    console.log('Selected slot:', slot);
     onSelectSlot(slot);
   };
 
   return (
     <div data-testid="slots-calendar">
       <Calendar
-        date={selectedDate || dayjs().format('YYYY-MM-DD')}
-        onDateChange={handleDateChange}
+        getDayProps={(date) => ({
+          onClick: () => {
+            const dateStr = dayjs(date).format('YYYY-MM-DD');
+            setSelectedDate(dateStr);
+          },
+        })}
         minDate={new Date()}
         maxDate={dayjs().add(14, 'day').toDate()}
       />
