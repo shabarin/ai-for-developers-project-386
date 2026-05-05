@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = '';
 
 export async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
