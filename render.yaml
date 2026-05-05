@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: kalenda-app
+    runtime: docker
+    plan: starter
+    region: oregon
+    branch: main
+    autoDeploy: true
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: GO_ENV
+        value: production
