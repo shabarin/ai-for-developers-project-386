@@ -1,2 +1,5 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/shabarin/ai-for-developers-project-386/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/shabarin/ai-for-developers-project-386/actions)
+
+### Deployed Application:
+https://kalenda-app.onrender.com
