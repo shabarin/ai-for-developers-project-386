@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"kalenda-backend/handlers"
+	"kalenda-backend/models"
 	"kalenda-backend/store"
 
 	"github.com/gorilla/mux"
@@ -14,6 +15,19 @@ import (
 
 func main() {
 	s := store.NewStore()
+
+	// Initialize default event types if store is empty
+	if len(s.ListEventTypes()) == 0 {
+		defaultTypes := []models.EventType{
+			{ID: "15min", Title: "15 Min Meeting", Description: "Quick 15-minute meeting", Duration: 15},
+			{ID: "30min", Title: "30 Min Meeting", Description: "Standard 30-minute meeting", Duration: 30},
+		}
+		for _, et := range defaultTypes {
+			s.CreateEventType(et)
+		}
+		log.Println("Default event types initialized")
+	}
+
 	adminHandler := handlers.NewAdminHandler(s)
 	publicHandler := handlers.NewPublicHandler(s)
 
