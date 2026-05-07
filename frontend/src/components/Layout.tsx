@@ -1,4 +1,4 @@
-import { AppShell, Burger, Group, Title, Anchor } from '@mantine/core';
+import { AppShell, Burger, Group, Title, Anchor, Menu } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Outlet, Link } from 'react-router-dom';
 
@@ -18,9 +18,21 @@ export function Layout() {
               <Title order={3}>Kalenda</Title>
             </Anchor>
           </Group>
-          <Anchor component={Link} to="/admin" size="sm">
-            Admin
-          </Anchor>
+          <Menu shadow="md" width={200}>
+            <Menu.Target>
+              <Anchor size="sm" style={{ cursor: 'pointer' }}>
+                Admin
+              </Anchor>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item component={Link} to="/my">
+                Event Types
+              </Menu.Item>
+              <Menu.Item component={Link} to="/my/bookings">
+                Bookings
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </Group>
       </AppShell.Header>
 

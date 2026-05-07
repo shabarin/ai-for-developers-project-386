@@ -18,10 +18,10 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/book/:eventTypeId" element={<BookPage />} />
             <Route path="/booking/:id" element={<BookingConfirmPage />} />
-            <Route path="/admin" element={<AdminEventTypesPage />} />
-            <Route path="/admin/event-types/new" element={<EventTypeFormPage />} />
-            <Route path="/admin/event-types/:id/edit" element={<EventTypeFormPage />} />
-            <Route path="/admin/bookings" element={<AdminBookingsPage />} />
+            <Route path="/my" element={<AdminEventTypesPage />} />
+            <Route path="/my/event-types/new" element={<EventTypeFormPage />} />
+            <Route path="/my/event-types/:id/edit" element={<EventTypeFormPage />} />
+            <Route path="/my/bookings" element={<AdminBookingsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

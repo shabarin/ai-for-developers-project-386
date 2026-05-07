@@ -36,7 +36,7 @@ export function AdminEventTypesPage() {
     <div data-testid="admin-page">
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
         <h1>Event Types</h1>
-        <Button component={Link} to="/admin/event-types/new" data-testid="create-button">
+         <Button component={Link} to="/my/event-types/new" data-testid="create-button">
           Create New
         </Button>
       </div>
@@ -45,7 +45,7 @@ export function AdminEventTypesPage() {
           <EventTypeCard
             key={et.id}
             eventType={et}
-            onEdit={(id) => (window.location.href = `/admin/event-types/${id}/edit`)}
+             onEdit={(id) => (window.location.href = `/my/event-types/${id}/edit`)}
             onDelete={handleDelete}
           />
         ))}
